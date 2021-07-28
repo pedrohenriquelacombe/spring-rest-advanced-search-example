@@ -6,9 +6,9 @@ This project is an example of how can we build advanced query search with Spring
 
 The main goal of this project is to show **two forms that we can build advanced query search with Spring Data JPA**.
 
-- First one, mapped as version 1 ("/persons/v1"), we are implementing a **custom repository** and using the **
-  EntityManager** for build our condition query
-- Second one, mapped as version 2 ("/persons/v2"), implementated using **Spring Data JPA Specifications**
+- First one, mapped as version 1 ("/persons/v1"), we are implementing a **custom repository** and using the
+  **EntityManager** for build our condition query;
+- Second one, mapped as version 2 ("/persons/v2"), implementated using **Spring Data JPA Specifications**;
 
 You can use both routes, /v1 or /v2. They will bring the same response, the only difference is thay they are implemented
 in differentes ways. Check below for some examples.
