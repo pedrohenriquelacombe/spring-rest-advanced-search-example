@@ -21,9 +21,14 @@ public class PersonResource {
     private PersonService personService;
     private PersonRepository personRepository;
 
-    @GetMapping
-    public PageResponse<Person> findAll(PersonFilter filter) {
-        return PageMapper.toDTO(this.personService.findAll(filter));
+    @GetMapping("/v1")
+    public PageResponse<Person> findAllV1(PersonFilter filter) {
+        return PageMapper.toDTO(this.personService.findAllV1(filter));
+    }
+
+    @GetMapping("/v2")
+    public PageResponse<Person> findAllV2(PersonFilter filter) {
+        return PageMapper.toDTO(this.personService.findAllV2(filter));
     }
 
     @PostMapping

@@ -18,7 +18,12 @@ public class PersonService {
     private PersonRepository personRepository;
     private PersonSpecification personSpecification;
 
-    public Page<Person> findAll(PersonFilter filter) {
+    public Page<Person> findAllV1(PersonFilter filter) {
+        filter.setSortBy(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSortBy());
+        return this.personRepository.persons(filter);
+    }
+
+    public Page<Person> findAllV2(PersonFilter filter) {
         filter.setSortBy(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSortBy());
         Pageable pageable = PageRequest.of(filter.getPageNumber(), filter.getPageSize(), filter.getSort());
         return this.personRepository.findAll(this.personSpecification.persons(filter), pageable);
