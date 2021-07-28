@@ -4,8 +4,7 @@ This project is an example of how can we build advanced query search with Spring
 
 ## About
 
-The main goal of this project is to serve as a **basis to start the development of a new REST API**. The main goal of
-this project is to show two forms that we can build advanced query search with Spring Data JPA.
+The main goal of this project is to show **two forms that we can build advanced query search with Spring Data JPA**.
 
 - First one, mapped as version 1 ("/persons/v1"), we are implementing a **custom repository** and using the **
   EntityManager** for build our condition query
