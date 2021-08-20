@@ -2,6 +2,7 @@ package com.example.advancedsearch.model;
 
 import com.example.advancedsearch.enums.MaritalStatus;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "persons")
 public class Person implements Serializable {
 
@@ -43,6 +45,16 @@ public class Person implements Serializable {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public Person(String name, String email, MaritalStatus maritalStatus, String district, String city, String state, LocalDate birthday) {
+        this.name = name;
+        this.email = email;
+        this.maritalStatus = maritalStatus;
+        this.district = district;
+        this.city = city;
+        this.state = state;
+        this.birthday = birthday;
+    }
 
     @PrePersist
     private void prePersist() {
