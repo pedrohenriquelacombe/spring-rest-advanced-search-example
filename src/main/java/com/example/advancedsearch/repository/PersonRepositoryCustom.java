@@ -6,6 +6,6 @@ import org.springframework.data.domain.Page;
 
 public interface PersonRepositoryCustom {
 
-    Page<Person> persons(PersonFilter filter);
+    Page<Person> findAllByFilter(PersonFilter filter);
 
 }
