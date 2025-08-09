@@ -7,7 +7,6 @@ import com.example.advancedsearch.specification.PersonSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -16,14 +15,10 @@ public class PersonService {
     private final PersonRepository personRepository;
 
     public Page<Person> findAllWithCustomFilter(PersonFilter filter) {
-        filter.setSort(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSort());
-
         return this.personRepository.findAllByFilter(filter);
     }
 
     public Page<Person> findAllWithSpecification(PersonFilter filter) {
-        filter.setSort(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSort());
-
         return this.personRepository.findAll(PersonSpecification.filterBy(filter), filter.toPageable());
     }
 
