@@ -3,15 +3,12 @@ package com.example.advancedsearch.repository.impl;
 import com.example.advancedsearch.dto.PersonFilter;
 import com.example.advancedsearch.model.Person;
 import com.example.advancedsearch.repository.PersonRepositoryCustom;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -22,32 +19,36 @@ public class PersonRepositoryImpl implements PersonRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Page<Person> persons(PersonFilter filter) {
-        Map<String, Object> conditions = this.buildConditions(filter);
+    public Page<Person> findAllByFilter(PersonFilter filter) {
+        var conditions = this.buildConditions(filter);
+        var hqlConditions = conditions.get("hql").toString();
+        var parameters = (Map<String, String>) conditions.get("parameters");
+        var pageable = filter.toPageable();
 
-        String hqlConditions = conditions.get("hql").toString();
-        Map<String, String> parameters = (Map<String, String>) conditions.get("parameters");
-        Pageable pageable = PageRequest.of(filter.getPageNumber(), filter.getPageSize(), filter.getSort());
+        var hql = new StringBuilder("FROM Person p ").append(hqlConditions);
 
-        String hql = "FROM Person p " + hqlConditions;
-        TypedQuery<Person> query = this.entityManager.createQuery("SELECT DISTINCT p " + hql, Person.class);
-        TypedQuery<Long> countQuery = this.entityManager.createQuery("SELECT COUNT(DISTINCT p.id) " + hql, Long.class);
+        pageable.getSort().stream().findFirst().ifPresent(order ->
+                hql.append(" ORDER BY p.").append(order.getProperty()).append(" ").append(order.getDirection().name())
+        );
 
-        for (Map.Entry<String, String> param : parameters.entrySet()) {
-            query.setParameter(param.getKey(), param.getValue());
-            countQuery.setParameter(param.getKey(), param.getValue());
-        }
+        var query = this.entityManager.createQuery("SELECT DISTINCT p " + hql, Person.class);
+        var countQuery = entityManager.createQuery("SELECT COUNT(DISTINCT p.id) FROM Person p " + hqlConditions, Long.class);
+
+        parameters.forEach((key, value) -> {
+            query.setParameter(key, value);
+            countQuery.setParameter(key, value);
+        });
 
         query.setMaxResults(pageable.getPageSize());
-        query.setFirstResult(Long.valueOf(pageable.getOffset()).intValue());
+        query.setFirstResult((int) pageable.getOffset());
 
-        return new PageImpl(query.getResultList(), pageable, countQuery.getSingleResult());
+        return new PageImpl<>(query.getResultList(), pageable, countQuery.getSingleResult());
     }
 
     private Map<String, Object> buildConditions(PersonFilter filter) {
-        String andOrWhere = "WHERE";
-        Map<String, Object> parameters = new HashMap();
-        StringJoiner stringJoiner = new StringJoiner(" ");
+        var andOrWhere = "WHERE";
+        var parameters = new HashMap<String, Object>();
+        var stringJoiner = new StringJoiner(" ");
 
         if (!ObjectUtils.isEmpty(filter)) {
             if (!ObjectUtils.isEmpty(filter.getName())) {
@@ -98,10 +99,7 @@ public class PersonRepositoryImpl implements PersonRepositoryCustom {
             }
         }
 
-        Map<String, Object> conditions = new HashMap();
-            conditions.put("parameters", parameters);
-            conditions.put("hql", stringJoiner.toString());
-        return conditions;
+        return Map.of("parameters", parameters, "hql", stringJoiner.toString());
     }
 
 }
