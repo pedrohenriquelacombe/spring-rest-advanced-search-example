@@ -1,7 +1,7 @@
-package com.example.advancedsearch.exceptionhandler;
+package com.example.advancedsearch.resource.exceptionHandler;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,10 +14,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
+public class  ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return this.handleExceptionInternal(ex, this.formatBody(ex.getBindingResult()), headers, status, request);
     }
 
