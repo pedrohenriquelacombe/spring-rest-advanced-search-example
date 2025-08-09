@@ -4,29 +4,27 @@ import com.example.advancedsearch.dto.PersonFilter;
 import com.example.advancedsearch.model.Person;
 import com.example.advancedsearch.repository.PersonRepository;
 import com.example.advancedsearch.specification.PersonSpecification;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PersonService {
 
-    private PersonRepository personRepository;
-    private PersonSpecification personSpecification;
+    private final PersonRepository personRepository;
 
-    public Page<Person> findAllV1(PersonFilter filter) {
-        filter.setSortBy(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSortBy());
-        return this.personRepository.persons(filter);
+    public Page<Person> findAllWithCustomFilter(PersonFilter filter) {
+        filter.setSort(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSort());
+
+        return this.personRepository.findAllByFilter(filter);
     }
 
-    public Page<Person> findAllV2(PersonFilter filter) {
-        filter.setSortBy(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSortBy());
-        Pageable pageable = PageRequest.of(filter.getPageNumber(), filter.getPageSize(), filter.getSort());
-        return this.personRepository.findAll(this.personSpecification.persons(filter), pageable);
+    public Page<Person> findAllWithSpecification(PersonFilter filter) {
+        filter.setSort(ObjectUtils.isEmpty(filter.getSort()) ? "name" : filter.getSort());
+
+        return this.personRepository.findAll(PersonSpecification.filterBy(filter), filter.toPageable());
     }
 
 }
