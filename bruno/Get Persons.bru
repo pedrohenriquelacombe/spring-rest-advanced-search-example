@@ -1,0 +1,32 @@
+meta {
+  name: Get Persons
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{HOST}}/persons/:VERSION?page=0
+  body: none
+  auth: inherit
+}
+
+params:query {
+  page: 0
+  ~size: 10
+  ~sort: birthday
+  ~order: DESC
+  ~name: A
+  ~email: mar
+  ~maritalStatus: MARRIED
+  ~district: Tijuca
+  ~city: Rio de Janeiro
+  ~state: RJ
+}
+
+params:path {
+  VERSION: v1
+}
+
+settings {
+  encodeUrl: true
+}

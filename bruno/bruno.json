@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "spring-rest-advanced-search-example",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

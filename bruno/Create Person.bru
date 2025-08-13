@@ -1,0 +1,38 @@
+meta {
+  name: Create Person
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{HOST}}/persons
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "{{NAME}}",
+    "email": "{{EMAIL}}",
+    "maritalStatus": "MARRIED",
+    "district": "Pinheiros",
+    "city": "São Paulo",
+    "state": "SP",
+    "birthday": "{{$randomDatePast}}"
+  }
+}
+
+script:pre-request {
+  const firstName = bru.interpolate("{{$randomFirstName}}");
+  const lastName = bru.interpolate("{{$randomLastName}}");
+  const fullName = `${firstName} ${lastName}`;
+  const emailPrefix = fullName.replaceAll(" ","_");
+  const email = `${emailPrefix.toLowerCase()}@gmail.com`;
+  
+  bru.setVar("NAME", fullName);
+  bru.setVar("EMAIL", email);
+}
+
+settings {
+  encodeUrl: true
+}
