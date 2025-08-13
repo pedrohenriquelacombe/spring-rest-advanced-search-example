@@ -1,4 +1,15 @@
 spring:
+  config:
+    activate:
+      on-profile: docker
+  jpa:
+    show-sql: false
+  datasource:
+    url: jdbc:postgresql://postgres:5432/adv_search_example
+
+---
+
+spring:
   jpa:
     show-sql: true
     hibernate:
@@ -8,14 +19,8 @@ spring:
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:root}
     url: ${DB_URL:jdbc:postgresql://localhost:5432/adv_search_example}
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: docker
-  jpa:
-    show-sql: false
-  datasource:
-    url: jdbc:postgresql://postgres:5432/adv_search_example
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
