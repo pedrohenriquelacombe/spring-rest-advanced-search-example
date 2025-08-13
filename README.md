@@ -1,69 +1,105 @@
-# Spring REST Advanced Search example
+# Spring REST Advanced Search Example
 
-This project is an example of how can we build advanced query search with Spring Data JPA.
+This project is an example of how we can build advanced query search with Spring Data JPA.
 
 ## About
 
-The main goal of this project is to show **two forms that we can build advanced query search with Spring Data JPA**.
+The main goal of this project is to show **two ways to build advanced query search with Spring Data JPA**.
 
-- First one, mapped as version 1 ("/persons/v1"), we are implementing a **custom repository** and using the
-  **EntityManager** for build our condition query;
-- Second one, mapped as version 2 ("/persons/v2"), implementated using **Spring Data JPA Specifications**;
+- The first one, mapped as version 1 (`/persons/v1`), implements a **custom repository** using the  
+  **EntityManager** to build conditional queries;
+- The second one, mapped as version 2 (`/persons/v2`), is implemented using **Spring Data JPA Specifications**;
 
-You can use both routes, /v1 or /v2. They will bring the same response, the only difference is thay they are implemented
-in differentes ways. Check below for some examples.
-
-**Advanced Search** examples:
-
-```
-localhost:8080/persons/v1?name=Ma
-localhost:8080/persons/v1?name=Ma&email=pedro@
-localhost:8080/persons/v1?name=Ma&email=pedro@&maritalStatus=MARRIED
-localhost:8080/persons/v1?name=Ma&email=pedro@&maritalStatus=MARRIED&district=Tijuca
-localhost:8080/persons/v1?name=Ma&email=pedro@&maritalStatus=MARRIED&district=Tijuca&city=Rio de Janeiro
-localhost:8080/persons/v1?name=Ma&email=pedro@&maritalStatus=MARRIED&state=RJ
-```
-
-**Pagination** and **Sorting** examples:
-
-```
-localhost:8080/persons/v1?pageSize=5
-localhost:8080/persons/v1?pageSize=5&pageNumber=0
-localhost:8080/persons/v1?sortBy=name&orderBy=asc
-localhost:8080/persons/v1?pageSize=5&pageNumber=0&sortBy=name&orderBy=desc
-```
+You can use both routes, `/v1` or `/v2`. They will return the same response; the only difference is that they are implemented  
+in different ways.
 
 ## Technologies
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
-- [Spring Validation](https://beanvalidation.org/)
+- [Jakarta Bean Validation](https://beanvalidation.org/)
 - [Lombok](https://projectlombok.org/)
-- [H2 Database](https://www.h2database.com/html/quickstart.html)
+- [ModelMapper](http://modelmapper.org/)
+- [Docker](https://docs.docker.com/get-started/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ## Features
 
-- DTO (Data Transfer Object) principles
+- DTO (Data Transfer Object) structure
 - Advanced query search with:
+    - TypedQuery approach
     - Spring Data JPA Specifications
-    - TypedQuery way
-- Custom Exception Handler messages
+- Custom exception handling with standardized error messages
+- Separation of concerns with service and repository layers
 
 ## Built With
 
-- [Maven](https://maven.apache.org/index.html)
-- [Spring Initializr](https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.5.3.RELEASE&packaging=jar&jvmVersion=11&groupId=com.example&artifactId=advancedsearch&name=SpringRestAdvancedSearch&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.advancedsearch&dependencies=web,lombok,h2,data-jpa,devtools,validation)
+- [Spring Initializr](https://start.spring.io/)
+- [Maven](https://maven.apache.org/)
 
-## How can I test my endpoints?
+## Getting Started
 
-First, open your preference code editor and run the following code below:
+### Run Manually
 
+1. Install dependencies:
+
+```bash
+  mvn clean install
 ```
-mvn clean install
+
+2. Start the PostgreSQL container:
+
+```bash
+  docker compose up db -d
 ```
 
-After the maven downloaded all dependencies, run the **SpringRestAdvancedSearchApplication.class**.
+3. Run the application:
 
-For tests cases, you can check the API endpoints with Postman.
+```bash
+   mvn spring-boot:run
+```
 
-- [Postman Collection](https://www.getpostman.com/collections/91845af25e9d11fb4f2f)
+### Run with Docker
+
+Start the full application stack with Docker Compose:
+
+```bash
+   docker compose up -d
+```
+
+## API Testing
+
+You can test the API endpoints using [Bruno API Client](https://www.usebruno.com/).
+
+> A folder named `bruno/` exists in the root of this project and contains predefined request collections for testing  
+> the endpoints.
+
+### How to use:
+
+1. Install Bruno (if you haven't yet):  
+   [https://www.usebruno.com/downloads](https://www.usebruno.com/downloads)
+
+2. Open the project in Bruno:
+
+- Open Bruno
+- Click **Open Collection Folder**
+- Select the `bruno/` folder located in the root of this project
+
+3. Run the requests:
+
+- The requests are organized by resource
+- You can test all CRUD operations directly from the interface
+
+Alternatively, you can use Postman, curl, or any other HTTP client to interact with the API.
+
+## Swagger Documentation
+
+The API documentation is available via Swagger UI served in a separate container.
+
+- Once the full application stack is running via Docker Compose, access the Swagger UI at:  
+  `http://localhost:8081`
+
+- This container hosts the Swagger UI which reads the OpenAPI spec exposed by the Spring Boot application.
+
+- Use this interface to explore the API interactively.
