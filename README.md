@@ -10,8 +10,8 @@ The main goal of this project is to show **two ways to build advanced query sear
   **EntityManager** to build conditional queries;
 - The second one, mapped as version 2 (`/persons/v2`), is implemented using **Spring Data JPA Specifications**;
 
-You can use both routes, `/v1` or `/v2`. They will return the same response; the only difference is that they are implemented  
-in different ways.
+You can use both routes, `/v1` or `/v2`. They will return the same response; the only difference is that they are
+implemented in different ways.
 
 ## Technologies
 
@@ -72,7 +72,7 @@ Start the full application stack with Docker Compose:
 
 You can test the API endpoints using [Bruno API Client](https://www.usebruno.com/).
 
-> A folder named `bruno/` exists in the root of this project and contains predefined request collections for testing  
+> A folder named `bruno/` exists in the root of this project and contains all predefined request collections for testing
 > the endpoints.
 
 ### How to use:
