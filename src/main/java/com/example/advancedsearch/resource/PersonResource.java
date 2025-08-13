@@ -10,8 +10,8 @@ import com.example.advancedsearch.repository.PersonRepository;
 import com.example.advancedsearch.service.PersonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +22,7 @@ public class PersonResource {
     private final PersonRepository personRepository;
 
     @GetMapping("/v1")
+    @ResponseStatus(HttpStatus.OK)
     public PageResponse<PersonResponse> findAllWithCustomFilter(PersonFilter filter) {
         var personResponsePage = PersonMapper.toPersonResponsePage(this.personService.findAllWithCustomFilter(filter));
 
@@ -29,6 +30,7 @@ public class PersonResource {
     }
 
     @GetMapping("/v2")
+    @ResponseStatus(HttpStatus.OK)
     public PageResponse<PersonResponse> findAllWithSpecification(PersonFilter filter) {
         var personResponsePage = PersonMapper.toPersonResponsePage(this.personService.findAllWithSpecification(filter));
 
@@ -36,7 +38,8 @@ public class PersonResource {
     }
 
     @PostMapping
-    public PersonResponse create(@Valid @RequestBody PersonRequest request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public PersonResponse createPerson(@Valid @RequestBody PersonRequest request) {
         return PersonMapper.toPersonResponse(this.personRepository.save(PersonMapper.toPerson(request)));
     }
 
