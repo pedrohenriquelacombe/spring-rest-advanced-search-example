@@ -3,12 +3,15 @@ package com.example.advancedsearch.specification;
 import com.example.advancedsearch.dto.PersonFilter;
 import com.example.advancedsearch.model.Person;
 import jakarta.persistence.criteria.Predicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 
-public class PersonSpecification {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PersonSpecification {
 
     public static Specification<Person> filterBy(PersonFilter filter) {
         return (root, query, criteriaBuilder) -> {
