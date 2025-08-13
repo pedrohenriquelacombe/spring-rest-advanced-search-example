@@ -24,7 +24,7 @@ public class Person implements Serializable {
     @Column
     private String name;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
