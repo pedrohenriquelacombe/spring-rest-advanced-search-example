@@ -4,8 +4,6 @@ spring:
       on-profile: docker
   jpa:
     show-sql: false
-  datasource:
-    url: jdbc:postgresql://postgres:5432/adv_search_example
 
 ---
 
