@@ -1,7 +1,18 @@
 version: '3.9'
 
 services:
-  spring-rest-advanced-search-service:
+  api-doc:
+    image: docker.swagger.io/swaggerapi/swagger-ui:latest
+    container_name: spring-rest-advanced-search-service-docs
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./docs/openapi.yaml:/usr/share/nginx/swagger.yaml:ro
+    environment:
+      SWAGGER_JSON: /usr/share/nginx/swagger.yaml
+      SUPPORTED_SUBMIT_METHODS: "[ ]"
+
+  service:
     build: .
     image: spring-rest-advanced-search-service
     container_name: spring-rest-advanced-search-service
