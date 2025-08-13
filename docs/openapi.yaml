@@ -1,0 +1,394 @@
+openapi: 3.0.3
+info:
+  title: Spring Rest Advanced Search Example
+  version: 1.0.0
+  description: |-
+    This project is an example of how can we build advanced query search with Spring Data JPA.
+    
+    Some useful links:
+    - [Repository](https://github.com/pedrohenriquelacombe/spring-rest-advanced-search-example)
+    - [Source API definition](https://github.com/pedrohenriquelacombe/spring-rest-advanced-search-example/blob/master/src/main/resources/openapi.yaml)
+paths:
+  /persons:
+    post:
+      summary: Create a new person
+      description: Create a new person record in the store
+      operationId: createPerson
+      tags:
+        - Persons
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonRequest'
+      responses:
+        '201':
+          description: Person successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomErrorResponse'
+        default:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomErrorResponse'
+              example:
+                status: 500
+                error: "Internal Server Error"
+                message: "Unexpected Error"
+                errors: [ ]
+                timestamp: "2025-08-13T02:51:07.295207Z"
+                path: "/persons"
+
+  /persons/v1:
+    get:
+      summary: List persons with custom filters
+      description: Returns a paginated list of persons based on custom filter criteria.
+      operationId: findAllWithCustomFilter
+      tags:
+        - Persons
+      parameters:
+        - $ref: '#/components/parameters/PersonFilterNameParam'
+        - $ref: '#/components/parameters/PersonFilterEmailParam'
+        - $ref: '#/components/parameters/PersonFilterMaritalStatusParam'
+        - $ref: '#/components/parameters/PersonFilterDistrictParam'
+        - $ref: '#/components/parameters/PersonFilterCityParam'
+        - $ref: '#/components/parameters/PersonFilterStateParam'
+        - $ref: '#/components/parameters/PageableFilterPageParam'
+        - $ref: '#/components/parameters/PageableFilterSizeParam'
+        - $ref: '#/components/parameters/PageableFilterSortParam'
+        - $ref: '#/components/parameters/PageableFilterOrderParam'
+      responses:
+        '200':
+          description: Paginated list of persons
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponsePersonResponse'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomErrorResponse'
+              example:
+                status: 400
+                error: "Bad Request"
+                message: "Validation failed"
+                errors:
+                  - field: "page"
+                    message: "Failed to convert property value of type 'java.lang.String' to required type 'int' for property 'page'"
+                  - field: "size"
+                    message: "Failed to convert property value of type 'java.lang.String' to required type 'int' for property 'size'"
+                timestamp: "2025-08-13T02:51:07.295207Z"
+                path: "/persons/v1"
+        default:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomErrorResponse'
+              example:
+                status: 500
+                error: "Internal Server Error"
+                message: "Unexpected Error"
+                errors: [ ]
+                timestamp: "2025-08-13T02:51:07.295207Z"
+                path: "/persons/v1"
+
+  /persons/v2:
+    get:
+      summary: List persons with filters using Specification
+      description: Returns a paginated list of persons based on the provided filter criteria.
+      operationId: findAllWithSpecification
+      tags:
+        - Persons
+      parameters:
+        - $ref: '#/components/parameters/PersonFilterNameParam'
+        - $ref: '#/components/parameters/PersonFilterEmailParam'
+        - $ref: '#/components/parameters/PersonFilterMaritalStatusParam'
+        - $ref: '#/components/parameters/PersonFilterDistrictParam'
+        - $ref: '#/components/parameters/PersonFilterCityParam'
+        - $ref: '#/components/parameters/PersonFilterStateParam'
+        - $ref: '#/components/parameters/PageableFilterPageParam'
+        - $ref: '#/components/parameters/PageableFilterSizeParam'
+        - $ref: '#/components/parameters/PageableFilterSortParam'
+        - $ref: '#/components/parameters/PageableFilterOrderParam'
+      responses:
+        '200':
+          description: Paginated list of persons
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponsePersonResponse'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomErrorResponse'
+              example:
+                status: 400
+                error: "Bad Request"
+                message: "Validation failed"
+                errors:
+                  - field: "page"
+                    message: "Failed to convert property value of type 'java.lang.String' to required type 'int' for property 'page'"
+                  - field: "size"
+                    message: "Failed to convert property value of type 'java.lang.String' to required type 'int' for property 'size'"
+                timestamp: "2025-08-13T02:51:07.295207Z"
+                path: "/persons/v2"
+        default:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomErrorResponse'
+              example:
+                status: 500
+                error: "Internal Server Error"
+                message: "Unexpected Error"
+                errors: [ ]
+                timestamp: "2025-08-13T02:51:07.295207Z"
+                path: "/persons/v2"
+
+components:
+  schemas:
+    PersonRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Pedro"
+        email:
+          type: string
+          example: "pedro@gmail.com"
+        maritalStatus:
+          type: string
+          description: "Marital Status"
+          example: "SINGLE"
+          enum:
+            - "MARRIED"
+            - "SINGLE"
+            - "DIVORCED"
+            - "WIDOWED"
+        district:
+          type: string
+          example: "Tijuca"
+        city:
+          type: string
+          example: "Rio de Janeiro"
+        state:
+          type: string
+          example: "RJ"
+        birthday:
+          type: string
+          format: date
+          example: "1992-08-28"
+      required:
+        - name
+        - email
+        - maritalStatus
+        - district
+        - city
+        - state
+        - birthday
+    PersonResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "6f617b0b-e0d5-4ec2-82b1-427c2b6e7e51"
+        name:
+          type: string
+          example: "Pedro"
+        email:
+          type: string
+          example: "pedro@gmail.com"
+        maritalStatus:
+          type: string
+          description: "Marital Status"
+          example: "SINGLE"
+          enum:
+            - "MARRIED"
+            - "SINGLE"
+            - "DIVORCED"
+            - "WIDOWED"
+        district:
+          type: string
+          example: "Tijuca"
+        city:
+          type: string
+          example: "Rio de Janeiro"
+        state:
+          type: string
+          example: "RJ"
+        birthday:
+          type: string
+          format: date
+          example: "1992-08-28"
+    PageResponsePersonResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonResponse'
+        totalPages:
+          type: integer
+          example: 5
+        currentPage:
+          type: integer
+          example: 1
+        totalElements:
+          type: integer
+          format: int64
+          example: 20
+        first:
+          type: boolean
+          example: true
+        last:
+          type: boolean
+          example: false
+    CustomErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Validation failed"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "email"
+              message:
+                type: string
+                example: "must be a well-formed email address"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-08-13T02:51:07.295207Z"
+        path:
+          type: string
+          example: "/persons"
+  parameters:
+    PersonFilterNameParam:
+      name: name
+      in: query
+      description: "Person's name (partial match filter)"
+      required: false
+      schema:
+        type: string
+        example: "Mar"
+    PersonFilterEmailParam:
+      name: email
+      in: query
+      description: "Person's e-mail (partial match filter)"
+      required: false
+      schema:
+        type: string
+        example: "mar"
+    PersonFilterMaritalStatusParam:
+      name: maritalStatus
+      in: query
+      description: "Person's marital status"
+      required: false
+      schema:
+        type: string
+        enum:
+          - "MARRIED"
+          - "SINGLE"
+          - "DIVORCED"
+          - "WIDOWED"
+    PersonFilterDistrictParam:
+      name: district
+      in: query
+      description: "Person's district"
+      required: false
+      schema:
+        type: string
+        example: "Tijuca"
+    PersonFilterCityParam:
+      name: city
+      in: query
+      description: "Person's city"
+      required: false
+      schema:
+        type: string
+        example: "Rio de Janeiro"
+    PersonFilterStateParam:
+      name: state
+      in: query
+      description: "Person's state"
+      required: false
+      schema:
+        type: string
+        example: "RJ"
+    PageableFilterPageParam:
+      name: page
+      in: query
+      description: "Page number (0-based)"
+      required: false
+      schema:
+        type: integer
+        default: 0
+        example: 2
+    PageableFilterSizeParam:
+      name: size
+      in: query
+      description: "Number of elements per page"
+      required: false
+      schema:
+        type: integer
+        default: 5
+        example: 3
+    PageableFilterSortParam:
+      name: sort
+      in: query
+      description: 'Sorting format "field"'
+      required: false
+      schema:
+        type: string
+        example: "name"
+    PageableFilterOrderParam:
+      name: order
+      in: query
+      description: 'Ordering format "ASC" or "DESC"'
+      required: false
+      schema:
+        type: string
+        default: "ASC"
+        example: "DESC"
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomErrorResponse'
+          example:
+            status: 404
+            error: "Not Found"
+            message: "No handler found for GET /persons/v3"
+            errors: [ ]
+            timestamp: "2025-08-13T02:51:07.295207Z"
+            path: "/persons/v3"
