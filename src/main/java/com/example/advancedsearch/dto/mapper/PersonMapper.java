@@ -3,37 +3,38 @@ package com.example.advancedsearch.dto.mapper;
 import com.example.advancedsearch.dto.request.PersonRequest;
 import com.example.advancedsearch.dto.response.PersonResponse;
 import com.example.advancedsearch.model.Person;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
-public class PersonMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PersonMapper {
 
     public static Person toPerson(PersonRequest dto) {
         var person = new Person();
 
-        person.setName(dto.getName());
-        person.setEmail(dto.getEmail());
-        person.setMaritalStatus(dto.getMaritalStatus());
-        person.setBirthday(dto.getBirthday());
-        person.setDistrict(dto.getDistrict());
-        person.setCity(dto.getCity());
-        person.setState(dto.getState());
+        person.setName(dto.name());
+        person.setEmail(dto.email());
+        person.setMaritalStatus(dto.maritalStatus());
+        person.setBirthday(dto.birthday());
+        person.setDistrict(dto.district());
+        person.setCity(dto.city());
+        person.setState(dto.state());
 
         return person;
     }
 
     public static PersonResponse toPersonResponse(Person person) {
-        var response = new PersonResponse();
-
-        response.setId(person.getId());
-        response.setName(person.getName());
-        response.setEmail(person.getEmail());
-        response.setMaritalStatus(person.getMaritalStatus());
-        response.setBirthday(person.getBirthday());
-        response.setDistrict(person.getDistrict());
-        response.setCity(person.getCity());
-        response.setState(person.getState());
-
-        return response;
+        return new PersonResponse(
+                person.getId(),
+                person.getName(),
+                person.getEmail(),
+                person.getMaritalStatus(),
+                person.getDistrict(),
+                person.getCity(),
+                person.getState(),
+                person.getBirthday()
+        );
     }
 
     public static Page<PersonResponse> toPersonResponsePage(Page<Person> pagedPersons) {
